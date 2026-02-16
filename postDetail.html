@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Details</title>
+    <link rel="stylesheet" href="postDetail.css">
+
+</head>
+<body>
+    
+    <div id="page">
+        <a href="feed.html"><button id="btn1">&larr;</button></a>
+    <h1 id="title">Loading...</h1>
+    <p id="content" class="postDetail"></p>
+    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const postID = params.get("postID");       // Read postID from URL
+
+        console.log("Received postID:", postID);
+        if (!postID) {
+            document.body.innerHTML = "<p class='error'>Invalid or missing post ID</p>";  // Validate postID
+        } else {
+            fetch(`http://localhost:3000/viewPost/${postID}`)  // Fetch post from backend
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Post not found");
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        throw new Error("No post data returned");
+                    }
+
+                    const post = data[0];     //  Display post
+                    div=document.createElement('div');
+                    div.className='postDetailContainer';
+                    const title=document.getElementById("title");
+                    const content=document.getElementById("content");
+                    title.innerText = post.postTitle;
+                    content.innerText = post.postDescription;
+                    div.appendChild(title);
+                    div.appendChild(content);
+                    document.getElementById("page").appendChild(div);
+                })
+                .catch(err => {
+                    document.body.innerHTML = `<p class='error'>${err.message}</p>`;
+                });
+        }
+    </script>
+
+</body>
+</html>

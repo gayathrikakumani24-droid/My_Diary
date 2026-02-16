@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Diary</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login">
+         <h1>My Diary</h1>
+         <h2>Welcome</h2>
+         <p id="l">Please Register to continue</p>
+         <form id="register-form">
+            <label for="email" id="emailInput">Email Address</label><br></br>
+            <input type="email" id="email" name="email" placeholder="name@gmail.com" required><br></br>
+            <label for="password" id="passwordInput">Password</label> <br></br>  
+            <input type="password" id="password" name="password" required><br></br>
+            <p>Already have an account? <a href="login.html">Login</a></p>
+            <a href="login.html"><button type="submit" id="loginButton">Register</button></a> 
+         </form>
+
+    </div>
+    <script>
+        const form=document.getElementById('register-form');
+        form.addEventListener('submit',async(e)=>{
+            e.preventDefault();
+            const formData=new URLSearchParams(new FormData(form));
+            console.log([...formData.entries()]);
+            const response=await fetch('http://localhost:3000/registerUser',{
+                method:"POST",
+                headers:{
+                    'Content-Type':'application/x-www-form-urlencoded'
+                },
+                body:formData
+        })
+        if(response.status==200){
+            alert("Registration Successful");
+            window.location.href="login.html";
+        }
+        else{
+            alert("Registration Failed");}                    
+        })
+        
+    </script>
+</body>
+</html>

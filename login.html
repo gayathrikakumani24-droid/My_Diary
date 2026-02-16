@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Diary</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="login">
+         <h1>My Diary</h1>
+         <h2>Welcome</h2>
+         <p id="l">Please Login to continue</p>
+         <form id="loginForm">
+            <label for="email" id="emailInput">Email Address</label><br></br>
+            <input type="email" id="email" name="email" placeholder="name@gmail.com" required><br></br>
+            <label for="password" id="passwordInput">Password</label> <br></br>  
+            <input type="password" id="password" name="password" required><br></br>
+            <p>Don't have an account? <a href="register.html">Register</a></p>
+            <a href="#"><button type="submit" id="loginButton">Login</button></a>
+         </form>
+    </div>
+    <script>
+        const form=document.getElementById('loginForm');
+        form.addEventListener('submit',async(e)=>{
+            e.preventDefault();
+           const formData=new URLSearchParams(new FormData(form));
+           const response=await fetch('http://localhost:3000/userLogin',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            body:formData
+           })
+    console.log(response);
+    const data = await response.json(); //  important
+    console.log(data);
+    localStorage.setItem('userID',data.userID);
+    if (response.status === 200) {
+        window.location.href = "feed.html";
+    } else {
+        alert(data.message || "Invalid Credentials");
+    }
+     
+     
+        })
+       
+      
+               
+    </script>
+</body>
+</html>
+              

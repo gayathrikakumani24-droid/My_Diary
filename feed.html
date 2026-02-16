@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed</title>
+    <link rel="stylesheet" href="feed.css">
+</head>
+<body>
+    
+    <div id="page">
+        <div id="top">
+        <a href="post.html"><button id="newPost">+ New Post</button></a>
+        <a href="login.html"><button id="logout">Logout</button></a>
+       </div>
+       <div id="posts">
+        
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', ()=>{
+        const userID = localStorage.getItem('userID');
+        fetch(`http://localhost:3000/getPosts?userID=${userID}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        displayPosts(data);})
+        .catch(err => console.error(err));
+        const displayPosts=(data)=>{
+            const container=document.getElementById('posts');
+            container.innerHTML='';
+            if (data.length === 0) {
+            container.innerHTML = "<p>No posts yet.</p>";
+            return;
+    }
+    data.forEach(post=>{
+                const postDiv=document.createElement('div');
+                postDiv.className='post';
+                const title=document.createElement('h1');
+                title.textContent=post.postTitle;
+                let description=post.postDescription;
+                const previewText=description.slice(0,500);
+                const preview=document.createElement('p');
+                preview.textContent=previewText + (description.length > 500 ? '...' : '');
+                const btn=document.createElement('button');
+                btn.textContent='View Post';
+                const userID = localStorage.getItem('userID'); 
+                btn.className='btn1';
+                postDiv.appendChild(title);
+                postDiv.appendChild(preview);
+                postDiv.appendChild(btn);
+                container.appendChild(postDiv);
+                 btn.onclick = () => {
+    fetch(`http://localhost:3000/viewPost/${post.ID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        displayPost(data);
+    })
+    .catch(err => console.error(err));
+};
+                
+    })
+        }
+    }
+        )
+    function displayPost(data){
+         const postID = data[0].ID;
+         const postD=data[0].postDescription;
+         console.log(postID);
+         window.location.href = `postDetail.html?postID=${postID}`;
+    }
+    </script>
+</body>
+</html>
