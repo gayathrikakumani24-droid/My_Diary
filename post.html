@@ -10,12 +10,27 @@
     <a href="feed.html"><button id="btn1">&larr;</button></a>
     <div class="post">
        <form id="postForm">
-        <label for="title">Post Title: </label><br>
-        <input id="title" placeholder="Title Here" name="postTitle"><br>
-        <label for="text">Describe your Day: </label><br>
-        <textarea type="text" rows="15" cols="80" name="postDescription"></textarea><br>
-        <button type="submit" id="postButton">Post My Day</button>
-       </form>    
+
+    <label>Post Title:</label><br>
+    <input id="title" name="postTitle"><br>
+
+    <label>Describe your Day:</label><br>
+    <textarea rows="15" cols="80"
+    name="postDescription"></textarea>
+
+    <div class="actions">
+        <button type="submit" id="postButton">
+            Post My Day
+        </button>
+
+        <button type="button" id="diaryFeelingBtn">
+            💭 Ask My Diary
+        </button>
+    </div>
+
+    <div id="diaryResponse"></div>
+
+</form>   
     </div>
 <script>
     let form=document.getElementById('postForm');
@@ -42,6 +57,48 @@
     btn1.addEventListener('click',()=>{ 
         window.location.href="feed.html";
     })
+    const diaryBtn = document.getElementById("diaryFeelingBtn");
+
+diaryBtn.addEventListener("click", async () => {
+
+    const title = document.getElementById("title").value;
+
+    const description =
+        document.querySelector("textarea").value;
+    const responseBox =document.getElementById("diaryResponse");
+    responseBox.style.display="block";
+   responseBox.innerHTML=`
+<div class="diary-card">
+    <p>📖 Reading your memories...</p>
+</div>
+`;
+    const response = await fetch(
+        "http://localhost:3000/diary-feelings",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title,
+                description
+            })
+        }
+    );
+
+    const data = await response.json();
+
+    
+
+responseBox.style.display = "block";
+
+responseBox.innerHTML = `
+<div class="diary-card">
+    <h3>📖 Your Diary Writes Back</h3>
+    <p>${data.reply}</p>
+</div>
+`;
+});
 </script>
 </body>
 

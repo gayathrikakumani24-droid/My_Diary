@@ -23,17 +23,16 @@ body{
     color: black;
 }
 .post{
-    height:550px;
+    min-height:550px;
     width:750px;
     background-color: antiquewhite;
     margin:auto;
     border-radius:30px;
-    padding-left: 100px;
+    padding:50px;
     margin-top:40px;
-    padding-top:70px;
-    box-shadow: 20px 20px 20px black;
+    box-shadow:20px 20px 20px black;
     border:1px black solid;
-    
+
 }
 input{
     height:30px;
@@ -59,4 +58,44 @@ label{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     cursor: pointer;
     align-content: center;
+}
+#diaryResponse{
+    display:none;
+    margin-top:25px;
+    animation:fadeIn 0.4s ease;
+}
+
+.diary-card{
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    border-left:5px solid #7e22ce;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.diary-card h3{
+    color:#7e22ce;
+    margin-bottom:10px;
+}
+
+.diary-card p{
+    line-height:1.8;
+    font-size:16px;
+}
+
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:15px;
+}
+#diaryFeelingBtn{
+    font-size: large;
+    font-family: "Comfortta",cursive;
+    width:150px;
+    height:50px;
+    box-shadow: 5px 5px 5px #6710c2;
+    border-radius: 10px;
+    left:20px;
+    margin-top: 20px;
+    
 }

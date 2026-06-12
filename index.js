@@ -8,6 +8,11 @@ app.use(express.json());
 const mysql=require('mysql2');
 const { connect } = require('node:http2');
 require("dotenv").config();
+const Groq = require("groq-sdk");
+
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY
+});
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -79,16 +84,29 @@ app.post('/userLogin',async(req,res)=>{
    
 });
 app.post('/newPost',(req,res)=>{
-    const {postTitle,postDescription,userID}=req.body;  
-    connection.query(`insert into Posts(UserID,postTitle,postDescription) values('${req.body.userID}','${req.body.postTitle}','${req.body.postDescription}')`,(err,result)=>{
-        if(err){
-            res.status(500).json({ message: "Database error" });
-            return;
+
+    const { userID, postTitle, postDescription } = req.body;
+
+    connection.query(
+        `INSERT INTO Posts
+         (UserID, postTitle, postDescription)
+         VALUES (?, ?, ?)`,
+        [userID, postTitle, postDescription],
+        (err,result)=>{
+
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    message:"Database error"
+                });
+            }
+
+            res.status(200).json({
+                message:"Post received"
+            });
         }
-        else{
-        res.status(200).json({ message: "Post received" });}
-    })
-})
+    );
+});
 app.get('/getPosts',(req,res)=>{
     const userID=req.query.userID;
     console.log("UserID received: ",userID);
@@ -115,4 +133,72 @@ app.get('/viewPost/:id', (req, res) => {
             res.status(200).json(result);
         }
     );
+});
+app.post("/diary-feelings", async (req, res) => {
+
+    try {
+
+        const { title, description } = req.body;
+
+        const prompt = `
+You are a personal diary.
+
+The user has just written a diary entry.
+
+Respond naturally as if you are the diary speaking back.
+
+Rules:
+- Do not say "Emotions I sensed".
+- Do not say "How I feel".
+- Do not say "Reflection".
+- Do not analyze the user.
+- Write like a caring friend who has been listening.
+- Sound warm, human and conversational.
+- Keep it between 50 and 100 words.
+- Start directly without titles or headings.
+- Mention details from the diary entry.
+- End naturally.
+
+Title:
+${title}
+
+Diary Entry:
+${description}
+`;
+
+        const completion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a living diary that emotionally reacts to diary entries."
+                },
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.8,
+            max_tokens: 200
+        });
+
+        const reply =
+            completion.choices[0].message.content;
+
+        res.status(200).json({
+            success: true,
+            reply
+        });
+
+    } catch (error) {
+
+        console.error("Groq Error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to generate diary response"
+        });
+
+    }
+
 });
