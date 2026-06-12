@@ -3,34 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>post</title>
-    <link rel="stylesheet" href="post.css">
+    <title>New Entry | My Diary</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/post.css">
 </head>
 <body>
-    <a href="feed.html"><button id="btn1">&larr;</button></a>
+    <a href="feed.html"><button id="btn1" aria-label="Back to feed">&larr;</button></a>
     <div class="post">
-       <form id="postForm">
+        <h1>📝 New Diary Entry</h1>
+        <form id="postForm">
 
-    <label>Post Title:</label><br>
-    <input id="title" name="postTitle"><br>
+            <label for="title">Post Title</label>
+            <input id="title" name="postTitle" autocomplete="off"><br>
 
-    <label>Describe your Day:</label><br>
-    <textarea rows="15" cols="80"
-    name="postDescription"></textarea>
+            <label for="description">Describe your Day</label>
+            <textarea id="description" rows="15" cols="80"
+            name="postDescription"></textarea>
 
-    <div class="actions">
-        <button type="submit" id="postButton">
-            Post My Day
-        </button>
+            <div class="actions">
+                <button type="submit" id="postButton">
+                    Post My Day
+                </button>
 
-        <button type="button" id="diaryFeelingBtn">
-            💭 Ask My Diary
-        </button>
-    </div>
+                <button type="button" id="diaryFeelingBtn">
+                    💭 Ask My Diary
+                </button>
+            </div>
 
-    <div id="diaryResponse"></div>
+            <div id="diaryResponse"></div>
 
-</form>   
+        </form>
     </div>
 <script>
     let form=document.getElementById('postForm');
@@ -68,8 +70,8 @@ diaryBtn.addEventListener("click", async () => {
     const responseBox =document.getElementById("diaryResponse");
     responseBox.style.display="block";
    responseBox.innerHTML=`
-<div class="diary-card">
-    <p>📖 Reading your memories...</p>
+<div class="diary-card loading">
+    <p>📖 Your diary is thinking<span class="loading-dots"></span></p>
 </div>
 `;
     const response = await fetch(

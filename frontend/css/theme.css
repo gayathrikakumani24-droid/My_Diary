@@ -1,0 +1,66 @@
+/* ============================================
+   MY DIARY — SHARED THEME TOKENS
+   Include this BEFORE page-specific CSS files.
+   ============================================ */
+
+:root{
+    --pink: #c81d77;
+    --purple: #6710c2;
+    --gradient: linear-gradient(135deg, #ef81bb, #ac64f9);
+    --gradient-soft: linear-gradient(135deg, #f7ecfa, #e9d9f6, #d7c7f2);
+
+    --bg-paper: #fffaf3;
+    --bg-card: #ffffff;
+    --bg-page: #f7ecfa;
+
+    --text-main: #3a2e3f;
+    --text-muted: #8a7f93;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+
+    --shadow-sm: 0 2px 8px rgba(103, 16, 194, 0.08);
+    --shadow-md: 0 8px 24px rgba(103, 16, 194, 0.15);
+    --shadow-lg: 0 16px 40px rgba(103, 16, 194, 0.18);
+    --shadow-pink: 0 6px 18px rgba(200, 29, 119, 0.18);
+
+    --font-heading: "Comfortaa", "Segoe UI", cursive, sans-serif;
+    --font-body: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+    --transition: 0.25s ease;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: var(--font-body);
+    color: var(--text-main);
+
+    background-image: url("../assets/background.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Focus visibility for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible{
+    outline: 3px solid #ffd9ec;
+    outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce){
+    *{
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

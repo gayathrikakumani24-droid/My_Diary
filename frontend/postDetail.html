@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Post Details</title>
-    <link rel="stylesheet" href="postDetail.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/postDetail.css">
 
 </head>
 <body>
     
-    <div id="page">
+    <div id="page" class="post">
         <a href="feed.html"><button id="btn1">&larr;</button></a>
     <h1 id="title">Loading...</h1>
     <p id="content" class="postDetail"></p>
@@ -39,7 +40,8 @@
                     const title=document.getElementById("title");
                     const content=document.getElementById("content");
                     title.innerText = post.postTitle;
-                    content.innerText = post.postDescription;
+                    const preview1= post.postDescription.replace("**Date:**", "Date: ");
+                    content.innerText = preview1;
                     div.appendChild(title);
                     div.appendChild(content);
                     document.getElementById("page").appendChild(div);

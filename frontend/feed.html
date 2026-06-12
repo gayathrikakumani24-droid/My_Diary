@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feed</title>
-    <link rel="stylesheet" href="feed.css">
+    <title>Feed | My Diary</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/feed.css">
 </head>
 <body>
-    
+
     <div id="page">
         <div id="top">
-        <a href="post.html"><button id="newPost">+ New Post</button></a>
-        <a href="login.html"><button id="logout">Logout</button></a>
-       </div>
-       <div id="posts">
-        
+            <div class="header-left">
+                <span class="logo" aria-hidden="true">📖</span>
+                <div class="header-titles">
+                    <h1>My Diary</h1>
+                    <p id="welcomeMessage">Welcome back! Here are your memories.</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="post.html"><button id="newPost">+ New Post</button></a>
+                <a href="login.html"><button id="logout">Logout</button></a>
+            </div>
+        </div>
+
+        <div id="posts">
+            <!-- Posts injected here by JS -->
+        </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', ()=>{
         const userID = localStorage.getItem('userID');
@@ -29,7 +42,12 @@
             const container=document.getElementById('posts');
             container.innerHTML='';
             if (data.length === 0) {
-            container.innerHTML = "<p>No posts yet.</p>";
+            container.innerHTML = `
+                <div class="empty-state">
+                    <span class="empty-icon" aria-hidden="true">📔</span>
+                    <h2>Your diary is empty</h2>
+                    <p>Start writing today's story — your first entry is just a click away.</p>
+                </div>`;
             return;
     }
     data.forEach(post=>{
@@ -37,15 +55,27 @@
                 postDiv.className='post';
                 const title=document.createElement('h1');
                 title.textContent=post.postTitle;
+
+                const dateEl=document.createElement('p');
+                dateEl.className='post-date';
+                if(post.createdAt){
+                    const d=new Date(post.createdAt);
+                    dateEl.textContent=d.toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+                } else {
+                    dateEl.textContent='';
+                }
+
                 let description=post.postDescription;
-                const previewText=description.slice(0,500);
+                const preview1= post.postDescription.replace("**Date:**", "Date: ");
+                const previewText=preview1.slice(0,500);
                 const preview=document.createElement('p');
-                preview.textContent=previewText + (description.length > 500 ? '...' : '');
+                preview.textContent=previewText + (preview1.length > 500 ? '...' : '');
                 const btn=document.createElement('button');
-                btn.textContent='View Post';
+                btn.textContent='Read More';
                 const userID = localStorage.getItem('userID'); 
                 btn.className='btn1';
                 postDiv.appendChild(title);
+                if(post.createdAt){ postDiv.appendChild(dateEl); }
                 postDiv.appendChild(preview);
                 postDiv.appendChild(btn);
                 container.appendChild(postDiv);

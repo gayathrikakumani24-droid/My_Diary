@@ -1,0 +1,186 @@
+/* ============================================
+   LOGIN PAGE
+   ============================================ */
+
+/*body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../assets/background.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 20px;
+} */
+body{
+    font-family: var(--font-body);
+    color: var(--text-main);
+
+    background: url("../assets/background.jpg")
+                center/cover no-repeat fixed;
+
+    position: relative;
+}
+
+body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(200,29,119,0.35),
+            rgba(103,16,194,0.35)
+        );
+
+    backdrop-filter: blur(4px);
+    z-index: -1;
+}
+
+.login{
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    background-color: var(--bg-card);
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    padding: 40px 36px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(103, 16, 194, 0.08);
+    animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp{
+    from{ opacity: 0; transform: translateY(16px); }
+    to{ opacity: 1; transform: translateY(0); }
+}
+
+/* Title row with diary icon */
+.login-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.login-title .diary-icon{
+    font-size: 36px;
+    line-height: 1;
+}
+
+h1{
+    text-align: center;
+    color: var(--purple);
+    font-size: 34px;
+    font-family: var(--font-heading);
+    text-decoration: none;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+h2{
+    text-align: center;
+    color: var(--pink);
+    font-size: 22px;
+    font-family: var(--font-heading);
+    text-decoration: none;
+    margin-top: 6px;
+    margin-bottom: 28px;
+    font-weight: 600;
+}
+
+label{
+    font-size: 15px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 6px;
+    margin-top: 18px;
+}
+
+input{
+    height: 46px;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid #e0d3ea;
+    background-color: #fdfaff;
+    padding: 0 14px;
+    font-size: 15px;
+    transition: border var(--transition), box-shadow var(--transition);
+}
+
+input:focus{
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(103, 16, 194, 0.12);
+    outline: none;
+}
+
+#l{
+    font-size: 16px;
+    font-family: var(--font-heading);
+    text-align: center;
+    color: var(--text-muted);
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+#loginButton{
+    height: 48px;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--gradient);
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    margin-top: 28px;
+    box-shadow: var(--shadow-pink);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+#loginButton:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(200, 29, 119, 0.3);
+}
+
+#loginButton:active{
+    transform: translateY(0);
+}
+
+form p{
+    font-size: 15px;
+    text-align: center;
+    margin-top: 18px;
+    color: var(--text-muted);
+}
+
+form p a{
+    color: var(--purple);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+form p a:hover{
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px){
+    .login{
+        padding: 30px 22px;
+        border-radius: var(--radius-md);
+    }
+    h1{ font-size: 28px; }
+    h2{ font-size: 18px; }
+}
