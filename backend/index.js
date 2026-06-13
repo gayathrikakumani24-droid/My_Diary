@@ -85,9 +85,9 @@ CREATE TABLE IF NOT EXISTS Posts(
         console.log("Posts table ready");
     }
 });
-// app.listen(3000,()=>{
-//     console.log("Server is running on port 3000");
-// })
+app.listen(3000,()=>{
+    console.log("Server is running on port 3000");
+})
 
 app.post('/registerUser',async(req,res)=>{
     console.log(req.body);
@@ -294,4 +294,4 @@ ${description}
     }
 
 });
-module.exports = app;
+
