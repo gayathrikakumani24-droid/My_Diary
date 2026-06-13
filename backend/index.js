@@ -13,23 +13,82 @@ const Groq = require("groq-sdk");
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
+// const connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME
+// });
+// connection.connect((err)=>{
+//     if(err){
+//         console.error("Error connecting to database:",err);
+//     }
+//     else{
+//         console.log("Connected to MySQL database");
+//     }
+// });
+
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
-connection.connect((err)=>{
+
+connection.connect((err) => {
     if(err){
-        console.error("Error connecting to database:",err);
+        console.log("Connection Failed");
+        console.error(err);
     }
     else{
-        console.log("Connected to MySQL database");
+        console.log("Connected to Aiven MySQL 🚀");
+    }
+});
+connection.query(
+    "SELECT * FROM Users",
+    (err, result) => {
+        console.log(result);
+    }
+);
+connection.query(`
+CREATE TABLE IF NOT EXISTS Users(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    EmailID VARCHAR(50) UNIQUE,
+    HashedPassword VARCHAR(100)
+);
+`, (err)=>{
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("Users table ready");
+    }
+});
+
+connection.query(`
+CREATE TABLE IF NOT EXISTS Posts(
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT,
+    postTitle VARCHAR(100),
+    postDescription VARCHAR(1500),
+    FOREIGN KEY(UserID) REFERENCES Users(ID)
+);
+`, (err)=>{
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("Posts table ready");
     }
 });
 app.listen(3000,()=>{
     console.log("Server is running on port 3000");
 })
+
 app.post('/registerUser',async(req,res)=>{
     console.log(req.body);
     const {email,password}=req.body;
@@ -57,31 +116,50 @@ app.get('/',(req,res)=>{
     console.log(req);
     res.status(200).json({message:"Successful"});
 }   );
-app.post('/userLogin',async(req,res)=>{
-    console.log(req.body);
-    const {email,password}=req.body;
-    let hashedPassword='';
-    let userID='';
-    // const hashedPassword="$2b$10$xezHaupUdEODZKx5Lh0Yq.6mp8mRMciaQ9hUH1joF0zx9V4iFU8tO"; //example hash
-        console.log(password); 
-        connection.query(`select ID,HashedPassword from Users where EmailID='${email}'`,async (err,result)=>{
-        if(err){
-            return res.status(500).json({ message: "Database error" });
+
+app.post('/userLogin', async (req, res) => {
+
+    const { email, password } = req.body;
+
+    connection.query(
+        "SELECT ID, HashedPassword FROM Users WHERE EmailID = ?",
+        [email],
+        async (err, result) => {
+
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    message: "Database error"
+                });
+            }
+
+            console.log("Query Result:", result);
+
+            if (result.length === 0) {
+                return res.status(404).json({
+                    message: "User not found"
+                });
+            }
+
+            const hashedPassword = result[0].HashedPassword;
+            const userID = result[0].ID;
+
+            const response = await bcrypt.compare(
+                password,
+                hashedPassword
+            );
+
+            if (response) {
+                return res.status(200).json({
+                    userID: userID
+                });
+            }
+
+            return res.status(401).json({
+                message: "Invalid password"
+            });
         }
-        const hashedPassword=result[0].HashedPassword;
-        const userID=result[0].ID;
-        console.log("hashed password from db: ",hashedPassword);
-        let response=await bcrypt.compare(password,hashedPassword);
-        console.log("is true? ",response);
-        if(response){
-             res.status(200).json({userID:userID});
-            return}
-        else{
-            res.status(401);
-            return
-        }
-});
-   
+    );
 });
 app.post('/newPost',(req,res)=>{
 
@@ -119,17 +197,31 @@ app.get('/getPosts',(req,res)=>{
         res.status(200).json(result);}    
     })
 })
+
 app.get('/viewPost/:id', (req, res) => {
+
     const postID = req.params.id;
 
     connection.query(
-        "SELECT * FROM posts WHERE ID = ?",
+        "SELECT * FROM Posts WHERE ID = ?",
         [postID],
         (err, result) => {
-            if (err) {
-                res.status(500).json({ message: "Database error" });
-                return;
+
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    message: "Database error"
+                });
             }
+
+            console.log("Post Query Result:", result);
+
+            if(result.length === 0){
+                return res.status(404).json({
+                    message: "Post not found"
+                });
+            }
+
             res.status(200).json(result);
         }
     );
