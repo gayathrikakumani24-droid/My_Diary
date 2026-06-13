@@ -79,19 +79,10 @@
                 postDiv.appendChild(preview);
                 postDiv.appendChild(btn);
                 container.appendChild(postDiv);
-                 btn.onclick = () => {
-    fetch(`http://localhost:3000/viewPost/${post.ID}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        displayPost(data);
-    })
-    .catch(err => console.error(err));
+
+btn.onclick = () => {
+    window.location.href =
+        `postDetail.html?postID=${post.ID}`;
 };
                 
     })
