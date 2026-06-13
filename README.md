@@ -1,4 +1,4 @@
-# 📖 My Diary
+My Diary
 
 A modern AI-powered digital diary application where users can securely record their daily memories, revisit past entries, and receive thoughtful responses from their diary using AI.
 
@@ -200,19 +200,23 @@ The diary responds as a caring companion:
 ### Login Page
 
 Secure login interface with modern diary theme.
+<img width="1366" height="627" alt="Screenshot (339)" src="https://github.com/user-attachments/assets/3d19e7eb-58d5-4ed9-b2ea-5afb20922430" />
 
 ### Feed Page
 
 Displays all diary memories in elegant cards.
+<img width="1366" height="642" alt="Screenshot (337)" src="https://github.com/user-attachments/assets/1decfcbb-25f0-42ff-8661-adce526e8541" />
 
 ### Create Post
 
 Write daily experiences and interact with the AI diary.
+<img width="1350" height="642" alt="Screenshot (335)" src="https://github.com/user-attachments/assets/862faf07-4685-497f-ae1c-298182f3991a" />
+
 
 ### AI Diary Response
 
 Receive thoughtful and personalized diary reflections.
-
+<img width="1348" height="636" alt="Screenshot (336)" src="https://github.com/user-attachments/assets/2220e3a2-148f-40e4-9caf-3775ce1eab07" />
 ---
 
 ## 👩‍💻 Author
