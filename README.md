@@ -1,4 +1,6 @@
-My Diary
+# My Diary
+<img width="1366" height="634" alt="Screenshot (340)" src="https://github.com/user-attachments/assets/fd97f804-92f1-4995-a03f-ae37870c81c3" />
+
 
 A modern AI-powered digital diary application where users can securely record their daily memories, revisit past entries, and receive thoughtful responses from their diary using AI.
 
